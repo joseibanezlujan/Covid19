@@ -1,4 +1,4 @@
-# **COVID-19 Outbreak mortality rate in Spain**
+# **COVID-19 Outbreak Mortality Rate in Spain Analysis Case Study**
 
 # ![Image text]( https://github.com/joseibanezlujan/Covid19/blob/main/header.jpg)
 
