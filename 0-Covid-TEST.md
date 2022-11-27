@@ -60,7 +60,7 @@ First, we will import the .csv file into a sql database using Microsoft Server S
 After, let's clean the dataset by removing the columns that are not of interest to us.<br/>Take a look at the code!
 
 ```sql
-ALTER TABLE Latin_deaths DROP COLUMN continent, total_cases_per_million, 
+ALTER TABLE Euro_deaths DROP COLUMN continent, total_cases_per_million, 
 total_deaths_per_million, gdp_per_capita, cardiovasc_death_rate, 
 hospital_beds_per_thousand, human_development_index
 ```
@@ -78,7 +78,7 @@ CREATE VIEW DIATasaContagPorPob AS
   SELECT location, date, population, total_cases, total_deaths
     ,(total_deaths/total_cases)* 100 AS per_tasamortalidad
     ,(total_cases/population)* 100 AS perc_contagiados
-  FROM PORTFOLIOProject..LatinDeaths
+  FROM owid-covid-data..EuroDeaths
   ORDER by total_cases desc
 ```
 
@@ -87,7 +87,7 @@ Next, we filtered the total deaths by country *location* and by number of *popul
 ```sql
 CREATE VIEW RESUMEN AS
   SELECT location, population,MAX(cast(total_deaths as int)) AS totmuertos
-  FROM PORTFOLIOProject..LatinDeaths
+  FROM owid-covid-data..EuroDeaths
   GROUP BY location, population
 ```
 
@@ -100,13 +100,13 @@ CREATE VIEW RESTasaMortPorPob AS
     , ROUND(AVG(diabetes_prevalence),2) AS Diabetes
     , MAX(cast(total_deaths as int)) AS totalDeath 
     ,MAX(total_deaths/population)*100 AS perc_tasamortali
-  FROM PORTFOLIOProject..LatinDeaths
+  FROM owid-covid-data..EuroDeaths
   GROUP BY location, population
   ORDER BY perc_tasamortali desc
 ```
 
 📍<ins>Vaccination and mortality</ins><br/>
-It is necessary to join with **JOIN** the information from the *LatinDeaths* and *vacu_latin* tables to contrast the mortality rate with the number of new vaccinations per day *new_vaccinations*. In this case we used the function **OVER(PARTITION BY)** instead of **GROUP BY** because the latter is limited to show the attributes by which the groups are grouped and excludes relevant variables for our analysis such as *date and population*.<br/>Let's see the script!
+It is necessary to join with **JOIN** the information from the *EuroDeaths* and *vacu_euro* tables to contrast the mortality rate with the number of new vaccinations per day *new_vaccinations*. In this case we used the function **OVER(PARTITION BY)** instead of **GROUP BY** because the latter is limited to show the attributes by which the groups are grouped and excludes relevant variables for our analysis such as *date and population*.<br/>Let's see the script!
 
 ```sql
 CREATE VIEW PobVaccinated AS 
@@ -115,8 +115,8 @@ CREATE VIEW PobVaccinated AS
 		  ,CAST(people_vaccinated_per_hundred as float) AS perc_pob_vac
 		  ,SUM(CAST(vac.new_vaccinations as float)) 
 		  OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) as total_vac
-	  FROM PORTFOLIOProject..LatinDeaths dea
-	  JOIN PORTFOLIOProject..vacu_latin vac
+	  FROM owid-covid-data..EuroDeaths dea
+	  JOIN owid-covid-data..vacu_euro vac
 	  ON dea.location = vac.location AND dea.date = vac.date
 ```
 
