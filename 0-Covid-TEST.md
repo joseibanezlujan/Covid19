@@ -50,14 +50,16 @@ Analyze COVID-19 evolution in Spain and the behavior of the mortality rate compa
 
 # Data Extraction and Cleaning
 
-The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of November 20, 2022 in two tables named:
+The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of November 20, 2022 and we have proceeded to extract and clean the information with the following method.
+
+* First, I have imported master database .csv file using Microsoft Server into a new SQL database so I can check the information in a easier way.
+
+* After, I have cleaned and extracted master database .csv file into two different tables containing the following info:
 
 * Table "Euro_deaths": cases, deaths, prevalence of diabetes, average age, cases and deaths per million, new cases per day.
 * Table "Vacu_euro": Vaccination data, full vaccinated population.
 
-First, we will import the .csv file into a sql database using Microsoft Server SQL import tool to a new database so we check the information more easily.
-
-After, let's clean the dataset by removing the columns that are not of interest to us.<br/>Take a look at the code!
+* Lastly, I have cleaned the dataset by removing the columns which are not of interest to us.
 
 ```sql
 ALTER TABLE Euro_deaths DROP COLUMN continent, total_cases_per_million, 
