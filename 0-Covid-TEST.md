@@ -50,7 +50,7 @@ Analyze COVID-19 evolution in Spain and the behavior of the mortality rate compa
 
 # Data Extraction and Cleaning
 
-The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of November 20, 2022 in the following two tables:
+The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of November 20, 2022 in the following two tables filtering by european continent.
 
 * Table "Euro_deaths": cases, deaths, diabetes prevalence, median age, cases and deaths per million, new cases per day.
 * Table "Vacu_euro": Vaccination data, full vaccinated population.
