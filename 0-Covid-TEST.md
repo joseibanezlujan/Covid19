@@ -50,16 +50,12 @@ Analyze COVID-19 evolution in Spain and the behavior of the mortality rate compa
 
 # Data Extraction and Cleaning
 
-The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of November 20, 2022 and we have proceeded to extract and clean the information with the following method.
+The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of November 20, 2022 in the following two tables:
 
-* First, I have imported master database .csv file using Microsoft Server into a new SQL database so I can check the information in a easier way.
-
-* After, I have cleaned and extracted master database .csv file into two different tables containing the following info:
-
-* Table "Euro_deaths": cases, deaths, prevalence of diabetes, average age, cases and deaths per million, new cases per day.
+* Table "Euro_deaths": cases, deaths, diabetes prevalence, median age, cases and deaths per million, new cases per day.
 * Table "Vacu_euro": Vaccination data, full vaccinated population.
 
-* Lastly, I have cleaned the dataset by removing the columns which are not of interest to us.
+I have proceeded to import those tables to a new SQL database named Covid19Project and procceded to clean the information.
 
 ```sql
 ALTER TABLE Euro_deaths DROP COLUMN continent, total_cases_per_million, 
@@ -80,16 +76,16 @@ CREATE VIEW DIATasaContagPorPob AS
   SELECT location, date, population, total_cases, total_deaths
     ,(total_deaths/total_cases)* 100 AS per_tasamortalidad
     ,(total_cases/population)* 100 AS perc_contagiados
-  FROM owid-covid-data..EuroDeaths
+  FROM Covid19Project.dbo.EuroDeaths
   ORDER by total_cases desc
 ```
 
-Next, we filtered the total deaths by country *location* and by number of *population* by aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the December 27 cutoff.
+Next, we filtered the total deaths by country *location* and by number of *population* by aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the Novemeber 20 cutoff.
 
 ```sql
 CREATE VIEW RESUMEN AS
   SELECT location, population,MAX(cast(total_deaths as int)) AS totmuertos
-  FROM owid-covid-data..EuroDeaths
+  FROM Covid19Project.dbo.EuroDeaths
   GROUP BY location, population
 ```
 
@@ -102,7 +98,7 @@ CREATE VIEW RESTasaMortPorPob AS
     , ROUND(AVG(diabetes_prevalence),2) AS Diabetes
     , MAX(cast(total_deaths as int)) AS totalDeath 
     ,MAX(total_deaths/population)*100 AS perc_tasamortali
-  FROM owid-covid-data..EuroDeaths
+  FROM Covid19Project.dbo.EuroDeaths
   GROUP BY location, population
   ORDER BY perc_tasamortali desc
 ```
@@ -117,8 +113,8 @@ CREATE VIEW PobVaccinated AS
 		  ,CAST(people_vaccinated_per_hundred as float) AS perc_pob_vac
 		  ,SUM(CAST(vac.new_vaccinations as float)) 
 		  OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) as total_vac
-	  FROM owid-covid-data..EuroDeaths dea
-	  JOIN owid-covid-data..vacu_euro vac
+	  FROM Covid19Project.dbo.EuroDeaths dea
+	  JOIN Covid19Project.dbo.vacu_euro vac
 	  ON dea.location = vac.location AND dea.date = vac.date
 ```
 
