@@ -65,27 +65,27 @@ hospital_beds_per_thousand, human_development_index
 
 # Creating views
 
-Due to the 88,000+ records we created views with the **CREATE VIEW** function, which will display the specific dataset allowing us to analyze each of the questions in detail.
+Due to the volume of data recorded on database I have created views with the **CREATE VIEW** function, which will display the specific dataset allowing us to analyze each of the questions in detail.
 
 📍<ins>Evolution of Mortality rate in Spain</ins><br/>The mortality rate was calculated with respect to the total number of cases; however, it was also necessary to calculate the infection rate per population to contrast the proportion of deaths with respect to the total number of inhabitants. The calculations are shown for each date from the date of Case 0 in each country.
 
-Let's check the code!
+Check the following script:
 
 ```sql
 CREATE VIEW DIATasaContagPorPob AS
   SELECT location, date, population, total_cases, total_deaths
     ,(total_deaths/total_cases)* 100 AS per_tasamortalidad
     ,(total_cases/population)* 100 AS perc_contagiados
-  FROM Covid19Project.dbo.EuroDeaths
+  FROM Covid19Project.dbo.Euro_deaths
   ORDER by total_cases desc
 ```
 
-Next, we filtered the total deaths by country *location* and by number of *population* by aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the Novemeber 20 cutoff.
+Next, we filtered the total deaths by country *location* and by number of *population* by aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the November 20 cutoff.
 
 ```sql
 CREATE VIEW RESUMEN AS
   SELECT location, population,MAX(cast(total_deaths as int)) AS totmuertos
-  FROM Covid19Project.dbo.EuroDeaths
+  FROM Covid19Project.dbo.Euro_deaths
   GROUP BY location, population
 ```
 
