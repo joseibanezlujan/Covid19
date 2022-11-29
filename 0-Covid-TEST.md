@@ -50,12 +50,12 @@ Analyze COVID-19 evolution in Spain and the behavior of the mortality rate compa
 
 # Data Extraction and Cleaning
 
-The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of November 20, 2022 in the following two tables filtering by european continent.
+The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of November 20, 2022 I have filtered the data by continent = 'Europe' into two different tables.
 
 * Table "Euro_deaths": cases, deaths, diabetes prevalence, median age, cases and deaths per million, new cases per day.
 * Table "Vacu_euro": Vaccination data, full vaccinated population.
 
-I have proceeded to import those tables to a new SQL database named Covid19Project and procceded to clean the information.
+After that I have cleaned the data which is not of interest for us from "Euro_deaths"
 
 ```sql
 ALTER TABLE Euro_deaths DROP COLUMN continent, total_cases_per_million, 
