@@ -50,12 +50,12 @@ Analyze COVID-19 evolution in Spain and the behavior of the mortality rate compa
 
 # Data Extraction and Cleaning
 
-The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of November 20, 2022 I have filtered the data by continent = 'Europe' into two different tables.
+The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of November 20, 2022 I have filtered the data and saved all the data related to 'Europe' continent. After that I have used PowerQuery to define a valid data type for each colummn and saved two excel files with the following data.
 
 * Table "Euro_deaths": cases, deaths, diabetes prevalence, median age, cases and deaths per million, new cases per day.
 * Table "Vacu_euro": Vaccination data, full vaccinated population.
 
-After that I have cleaned the data which is not of interest for us from "Euro_deaths"
+After that imported both files into two SQL tables and cleaned the data which is not of interest for us from "Euro_deaths"
 
 ```sql
 ALTER TABLE Euro_deaths DROP COLUMN continent, total_cases_per_million, 
@@ -69,15 +69,14 @@ Due to the volume of data recorded on database I have created views with the **C
 
 📍<ins>Evolution of Mortality rate in Spain</ins><br/>The mortality rate was calculated with respect to the total number of cases; however, it was also necessary to calculate the infection rate per population to contrast the proportion of deaths with respect to the total number of inhabitants. The calculations are shown for each date from the date of Case 0 in each country.
 
-Check the following script:
+Check the following script for SQL SERVER:
 
 ```sql
 CREATE VIEW DIATasaContagPorPob AS
   SELECT location, date, population, total_cases, total_deaths
     ,(total_deaths/total_cases)* 100 AS per_tasamortalidad
     ,(total_cases/population)* 100 AS perc_contagiados
-  FROM Covid19Project.dbo.Euro_deaths
-  ORDER by total_cases desc
+  FROM Covid19Project.dbo.Euro_deaths  
 ```
 
 Next, we filtered the total deaths by country *location* and by number of *population* by aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the November 20 cutoff.
