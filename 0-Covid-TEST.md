@@ -112,7 +112,7 @@ CREATE VIEW PobVaccinated AS
 		  ,CAST(people_vaccinated_per_hundred as float) AS perc_pob_vac
 		  ,SUM(CAST(vac.new_vaccinations as float)) 
 		  OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) as total_vac
-	  FROM Covid19Project.dbo.EuroDeaths dea
+	  FROM Covid19Project.dbo.Euro_Deaths dea
 	  JOIN Covid19Project.dbo.vacu_euro vac
 	  ON dea.location = vac.location AND dea.date = vac.date
 ```
