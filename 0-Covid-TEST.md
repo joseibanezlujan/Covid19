@@ -97,7 +97,7 @@ CREATE VIEW RESTasaMortPorPob AS
     , ROUND(AVG(diabetes_prevalence),2) AS Diabetes
     , MAX(cast(total_deaths as int)) AS totalDeath 
     ,MAX(total_deaths/population)*100 AS perc_tasamortali
-  FROM Covid19Project.dbo.EuroDeaths
+  FROM Covid19Project.dbo.Euro_Deaths
   GROUP BY location, population
   ORDER BY perc_tasamortali desc
 ```
