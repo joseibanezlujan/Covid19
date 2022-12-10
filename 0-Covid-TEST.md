@@ -67,9 +67,9 @@ hospital_beds_per_thousand, human_development_index
 
 Due to the volume of data recorded on database I have created views with the **CREATE VIEW** function, which will display the specific dataset allowing us to analyze each of the questions in detail.
 
-📍<ins>Evolution of Mortality rate in Spain</ins><br/>The mortality rate was calculated with respect to the total number of cases; however, it was also necessary to calculate the infection rate per population to contrast the proportion of deaths with respect to the total number of inhabitants. The calculations are shown for each date from the date of Case 0 in each country.
+📍<ins>Evolution of Mortality rate in Spain</ins><br/>Mortality rate was calculated with respect to the total number of Covid death cases. Nevertheless, it was important to calculate the infection rate per population to compare the proportion of deaths with respect to the total number of inhabitants. Calculations are shown from the date of Case 0 in each country.
 
-Check the following script for SQL SERVER:
+Check the following script for SQL SERVER (it is not possible and recommended to use an 'ORDER BY' in a SQL SERVER view, however in MySQL or Oracle is possible):
 
 ```sql
 CREATE VIEW DIATasaContagPorPob AS
@@ -78,8 +78,14 @@ CREATE VIEW DIATasaContagPorPob AS
     ,(total_cases/population)* 100 AS perc_contagiados
   FROM Covid19Project.dbo.Euro_deaths  
 ```
+Then, we retrieve the information stored on DIATasaContagPorPob ordered by total_cases number in descending order.
 
-Next, we filtered the total deaths by country *location* and by number of *population* by aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the November 20 cutoff.
+```sql
+SELECT * from dbo.DIATasaContagPorPob
+ORDER BY total_cases desc
+```
+
+After that we filter the total deaths by country *location* and *population* number. We use an aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the November 20 cutoff.
 
 ```sql
 CREATE VIEW RESUMEN AS
@@ -97,13 +103,18 @@ CREATE VIEW RESTasaMortPorPob AS
     , ROUND(AVG(diabetes_prevalence),2) AS Diabetes
     , MAX(cast(total_deaths as int)) AS totalDeath 
     ,MAX(total_deaths/population)*100 AS perc_tasamortali
-  FROM Covid19Project.dbo.Euro_Deaths
+  FROM Covid19Project.dbo.Euro_deaths
   GROUP BY location, population
+```
+After RESTasaMortPorPo view is created we retrieve the mentioned data ordered by perc_tasamortali in descending order.
+
+```sql
+  SELECT * FROM RESTasaMortPorPob
   ORDER BY perc_tasamortali desc
 ```
 
 📍<ins>Vaccination and mortality</ins><br/>
-It is necessary to join with **JOIN** the information from the *EuroDeaths* and *vacu_euro* tables to contrast the mortality rate with the number of new vaccinations per day *new_vaccinations*. In this case we used the function **OVER(PARTITION BY)** instead of **GROUP BY** because the latter is limited to show the attributes by which the groups are grouped and excludes relevant variables for our analysis such as *date and population*.<br/>Let's see the script!
+It is necessary to join with **JOIN** the information from the *Euro_deaths* and *Vacu_euro* tables to contrast the mortality rate with the number of new vaccinations per day *new_vaccinations*. In this case we used the function **OVER(PARTITION BY)** instead of **GROUP BY** because the latter is limited to show the attributes by which the groups are grouped and excludes relevant variables for our analysis such as *date and population*.<br/>Let's see the script!
 
 ```sql
 CREATE VIEW PobVaccinated AS 
@@ -112,8 +123,8 @@ CREATE VIEW PobVaccinated AS
 		  ,CAST(people_vaccinated_per_hundred as float) AS perc_pob_vac
 		  ,SUM(CAST(vac.new_vaccinations as float)) 
 		  OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) as total_vac
-	  FROM Covid19Project.dbo.Euro_Deaths dea
-	  JOIN Covid19Project.dbo.vacu_euro vac
+	  FROM Covid19Project.dbo.Euro_deaths dea
+	  JOIN Covid19Project.dbo.Vacu_euro vac
 	  ON dea.location = vac.location AND dea.date = vac.date
 ```
 
