@@ -65,45 +65,53 @@ Due to the volume of data recorded on database I have created views with the **C
 Check the following script for SQL SERVER (it is not possible and recommended to use an 'ORDER BY' in a SQL SERVER view, however in MySQL or Oracle is possible):
 
 ```sql
-CREATE VIEW DIATasaContagPorPob AS
-  SELECT location, date, population, total_cases, total_deaths
-    ,(total_deaths/total_cases)* 100 AS per_tasamortalidad
-    ,(total_cases/population)* 100 AS perc_contagiados
-  FROM Portfolio.dbo.CovidDeaths  
+CREATE VIEW TasaMortPob AS
+ SELECT Location, date, population, total_cases, new_cases, total_deaths, 
+ ROUND((CAST(total_deaths as FLOAT)/CAST(total_cases as FLOAT))* 100, 4) AS perc_tasamortalidad,
+ ROUND((CAST(total_cases as FLOAT)/CAST(population as FLOAT))* 100, 4) AS perc_contagiados
+ FROM Portfolio.dbo.CovidDeaths  
 ```
-Then, we retrieve the information stored on DIATasaContagPorPob ordered by total_cases number in descending order.
+Then, we retrieve the information stored on RESTasaMortPorPob ordered by total_cases number in descending order and selecting 'Spain' as location.
 
 ```sql
-SELECT * from Portfolio.dbo.DIATasaContagPorPob
+SELECT * from Portfolio.dbo.TasaMortPob
+WHERE location = 'Spain'
 ORDER BY total_cases desc
 ```
-
-After that we filter the total deaths by country *location* and *population* number. We use an aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the December 11 cutoff.
+After we filter the total deaths by country *location* and *population* number. We use an aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the December 11 cutoff.
 
 ```sql
-CREATE VIEW RESUMEN AS
-  SELECT location, population,MAX(cast(total_deaths as int)) AS totmuertos
-  FROM Portfolio.dbo.CovidDeaths
-  GROUP BY location, population
+CREATE VIEW RESTotalMuertos AS
+ SELECT location, population, MAX(CAST(total_deaths as FLOAT)) AS total_muertos
+ FROM Portfolio.dbo.CovidDeaths
+ GROUP BY location, population 
+```
+
+Once we created the view we proceed to obtain the data for all the european countries and arrange them from highest to lowest total deaths count.
+
+```sql
+SELECT * from Portfolio.dbo.RESUMEN
+WHERE continent = 'Europe'
+ORDER BY total_muertos DESC
 ```
 
 📍<ins>Indicators of diabetes incidence and average age</ins><br/>
 Only aggregate functions were used for this view, since the values for diabetes incidence and average age are the same for all records up to the cutoff date.<br/>The average of both variables was calculated and grouped with **GROUP BY** by location and number of inhabitants as the previous view.
 
 ```sql
-CREATE VIEW RESTasaMortPorPob AS
+CREATE VIEW DIATasaContagPob AS
   SELECT location, population, AVG(ROUND(median_age,0)) AS EdadProm
     , ROUND(AVG(diabetes_prevalence),2) AS Diabetes
     , MAX(cast(total_deaths as int)) AS totalDeath 
-    ,MAX(total_deaths/population)*100 AS perc_tasamortali
+    ,MAX(total_deaths/population)*100 AS perc_tasamortal
   FROM Portfolio.dbo.CovidDeaths
   GROUP BY location, population
 ```
-After RESTasaMortPorPo view is created we retrieve the mentioned data ordered by perc_tasamortali in descending order.
+After DIATasaContagPob view is created we retrieve the mentioned data ordered by perc_tasamortal in descending order.
 
 ```sql
-  SELECT * FROM Portfolio.dbo.RESTasaMortPorPob
-  ORDER BY perc_tasamortali desc
+  SELECT * FROM Portfolio.dbo.DIATasaContagPob
+  ORDER BY perc_tasamortal desc
 ```
 
 📍<ins>Vaccination and mortality</ins><br/>
