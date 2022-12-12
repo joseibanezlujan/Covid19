@@ -71,7 +71,7 @@ CREATE VIEW TasaMortPob AS
  ROUND((CAST(total_cases as FLOAT)/CAST(population as FLOAT))* 100, 4) AS perc_contagiados
  FROM Portfolio.dbo.CovidDeaths  
 ```
-Then, we retrieve the information stored on RESTasaMortPorPob ordered by total_cases number in descending order and selecting 'Spain' as location.
+Then, we retrieve the information stored on TasaMortPob ordered by total_cases number in descending order and selecting 'Spain' as location.
 
 ```sql
 SELECT * from Portfolio.dbo.TasaMortPob
