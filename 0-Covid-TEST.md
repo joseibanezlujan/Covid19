@@ -96,22 +96,22 @@ ORDER BY total_muertos DESC
 ```
 
 📍<ins>Indicators of diabetes incidence and average age</ins><br/>
-Only aggregate functions were used for this view, since the values for diabetes incidence and average age are the same for all records up to the cutoff date.<br/>The average of both variables was calculated and grouped with **GROUP BY** by location and number of inhabitants as the previous view.
+Only aggregate functions were used for this view, since the values for diabetes incidence and average age are the same for all records up to the cutoff date.<br/>The average of both variables was calculated and grouped with **GROUP BY** by location and number of inhabitants as the previous view. **FOR THIS CASE WE HACE USED A MODIFIED CovidDeaths table called 'CovidDeathsMOD'**
 
 ```sql
 CREATE VIEW DIATasaContagPob AS
-  SELECT location, population, AVG(ROUND(median_age,0)) AS EdadProm
-    , ROUND(AVG(diabetes_prevalence),2) AS Diabetes
-    , MAX(cast(total_deaths as int)) AS totalDeath 
-    ,MAX(total_deaths/population)*100 AS perc_tasamortal
-  FROM Portfolio.dbo.CovidDeaths
-  GROUP BY location, population
+ SELECT location, population, AVG(ROUND(median_age,0)) AS EdadProm,
+ ROUND(AVG(CAST(diabetes_prevalence AS FLOAT)),2) AS Diabetes,
+ MAX(CAST(total_deaths AS FLOAT)) AS totalDeath,
+ MAX(CAST(total_deaths AS FLOAT)/CAST(population AS FLOAT))*100 AS perc_tasamortal
+ FROM Portfolio.dbo.CovidDeathsMOD
+ GROUP BY location, population
 ```
 After DIATasaContagPob view is created we retrieve the mentioned data ordered by perc_tasamortal in descending order.
 
 ```sql
-  SELECT * FROM Portfolio.dbo.DIATasaContagPob
-  ORDER BY perc_tasamortal desc
+ SELECT * FROM Portfolio.dbo.DIATasaContagPob
+ ORDER BY perc_tasamortal desc
 ```
 
 📍<ins>Vaccination and mortality</ins><br/>
