@@ -98,7 +98,7 @@ ORDER BY total_muertos DESC
 📍<ins>Indicators of diabetes incidence and average age</ins><br/>
 Only aggregate functions were used, since average age and diabetes incidence values are the same for all records up to the cutoff date.
 The average of both variables was calculated and grouped with **GROUP BY** by location and number of inhabitants as the previous view. 
-<br>**FOR THIS CASE WE HACE USED A MODIFIED CovidDeaths table called 'CovidDeathsMOD'**
+<br><br>**FOR THIS CASE WE HAVE USED A MODIFIED CovidDeaths table called 'CovidDeathsMOD'**
 
 ```sql
 CREATE VIEW DIATasaContagPob AS
