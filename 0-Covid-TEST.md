@@ -12,10 +12,10 @@ A posterior genetic analysis has shown that at least 15 strains of the virus had
 
 Medical professionals and those who live in retirement homes have experienced especially high infection rates. On 25 March, the official death toll in Spain surpassed that of mainland China. On 2 April, 950 people died of the virus in a 24-hour period—at the time, the most by any country in a single day. On 17 May, the daily death toll announced by the Spanish government fell below 100 for the first time, and 1 June was the first day without deaths by COVID-19. 
 
-The state of alarm ended on 21 June. However, the number of cases increased again in July in a number of cities including Barcelona, Zaragoza and Madrid, which led to reimposition of some restrictions but no national lockdown. As of 20 November 2022, the pandemic had caused more than 638 million cases and 6.62 million confirmed deaths, making it one of the deadliest in history. 
+The state of alarm ended on 21 June. However, the number of cases increased again in July in a number of cities including Barcelona, Zaragoza and Madrid, which led to reimposition of some restrictions but no national lockdown. As of 11 December 2022, the pandemic had caused more than 638 million cases and 6.62 million confirmed deaths, making it one of the deadliest in history. 
 
 **Reference sources:** [Wikipedia.org](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Spain),
- [Expansion.com](https://datosmacro.expansion.com/otros/coronavirus/espana), [Instituto de Salud Carlos III](https://www.isciii.es/)
+ [Expansion.com](https://datosmacro.expansion.com/otros/coronavirus/espana), [Instituto de Salud Carlos III](https://www.isciii.es/) & [Our World in Data](https://ourworldindata.org/covid-deaths)
 
 [**View Power BI dashboard online**](https://bit.ly/)
 
@@ -25,7 +25,7 @@ The state of alarm ended on 21 June. However, the number of cases increased agai
 
 * **[1. Business Problem](#Business-Problem)**
 * **[2. Data Extraction and Cleaning](#Data-Extraction-and-Cleaning)**
-* **[3. Creating Views](#Creating-Views)**
+* **[3. Creating Queries and Views](#Creating-Queries-and-Views)**
 * **[4. Analysis and Results](#Analysis-and-Results)**
 
 ************
@@ -46,24 +46,17 @@ Analyze COVID-19 evolution in Spain and the behavior of the mortality rate compa
 
 | Scope of the study | Type of analysis | Tools used |
 | --- | :-: | --- |
-| Longitudinal: Beginning of Covid-19 Outbreak until Nov 20, 2022 |   Exploratory   | Excel - SQL - Power BI |
+| Longitudinal: Beginning of Covid-19 Outbreak until Dec 11, 2022 |   Exploratory   | Excel - SQL - Power BI |
 
 # Data Extraction and Cleaning
 
-The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of November 20, 2022 I have filtered the data and saved all the data related to 'Europe' continent. After that I have used PowerQuery to define a valid data type for each colummn and saved two excel files with the following data.
+The data used for the analysis was obtained from [*Our World in Data*](https://ourworldindata.org/covid-deaths), as of December 11, 2022. I have filtered and saved all the relevant data into two excel files and import them to my Portfolio SQL database as:
 
-* Table "Euro_deaths": cases, deaths, diabetes prevalence, median age, cases and deaths per million, new cases per day.
-* Table "Vacu_euro": Vaccination data, full vaccinated population.
+* Table "CovidDeaths" containing:  location, date, population, cases, deaths and hospitalization related information.
+* Table "CovidVaccinations" containing: location, date, age, gdp, diseases and other vaccination related data. 
 
-After that imported both files into two SQL tables and cleaned the data which is not of interest for us from "Euro_deaths"
 
-```sql
-ALTER TABLE Euro_deaths DROP COLUMN continent, total_cases_per_million, 
-total_deaths_per_million, gdp_per_capita, cardiovasc_death_rate, 
-hospital_beds_per_thousand, human_development_index
-```
-
-# Creating views
+# Creating Queries and Views
 
 Due to the volume of data recorded on database I have created views with the **CREATE VIEW** function, which will display the specific dataset allowing us to analyze each of the questions in detail.
 
@@ -85,7 +78,7 @@ SELECT * from dbo.DIATasaContagPorPob
 ORDER BY total_cases desc
 ```
 
-After that we filter the total deaths by country *location* and *population* number. We use an aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the November 20 cutoff.
+After that we filter the total deaths by country *location* and *population* number. We use an aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the December 11 cutoff.
 
 ```sql
 CREATE VIEW RESUMEN AS
