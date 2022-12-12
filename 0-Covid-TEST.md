@@ -69,7 +69,7 @@ CREATE VIEW DIATasaContagPorPob AS
   SELECT location, date, population, total_cases, total_deaths
     ,(total_deaths/total_cases)* 100 AS per_tasamortalidad
     ,(total_cases/population)* 100 AS perc_contagiados
-  FROM Covid19Project.dbo.Euro_deaths  
+  FROM Covid19Project.dbo.CovidDeaths  
 ```
 Then, we retrieve the information stored on DIATasaContagPorPob ordered by total_cases number in descending order.
 
@@ -83,7 +83,7 @@ After that we filter the total deaths by country *location* and *population* num
 ```sql
 CREATE VIEW RESUMEN AS
   SELECT location, population,MAX(cast(total_deaths as int)) AS totmuertos
-  FROM Covid19Project.dbo.Euro_deaths
+  FROM Covid19Project.dbo.CovidDeaths
   GROUP BY location, population
 ```
 
@@ -96,7 +96,7 @@ CREATE VIEW RESTasaMortPorPob AS
     , ROUND(AVG(diabetes_prevalence),2) AS Diabetes
     , MAX(cast(total_deaths as int)) AS totalDeath 
     ,MAX(total_deaths/population)*100 AS perc_tasamortali
-  FROM Covid19Project.dbo.Euro_deaths
+  FROM Covid19Project.dbo.CovidDeaths
   GROUP BY location, population
 ```
 After RESTasaMortPorPo view is created we retrieve the mentioned data ordered by perc_tasamortali in descending order.
@@ -107,7 +107,7 @@ After RESTasaMortPorPo view is created we retrieve the mentioned data ordered by
 ```
 
 📍<ins>Vaccination and mortality</ins><br/>
-It is necessary to join with **JOIN** the information from the *Euro_deaths* and *Vacu_euro* tables to contrast the mortality rate with the number of new vaccinations per day *new_vaccinations*. In this case we used the function **OVER(PARTITION BY)** instead of **GROUP BY** because the latter is limited to show the attributes by which the groups are grouped and excludes relevant variables for our analysis such as *date and population*.<br/>Let's see the script!
+It is necessary to join with **JOIN** the information from the *CovidDeaths* and *CovidVaccinations* tables to contrast the mortality rate with the number of new vaccinations per day *new_vaccinations*. In this case we used the function **OVER(PARTITION BY)** instead of **GROUP BY** because the latter is limited to show the attributes by which the groups are grouped and excludes relevant variables for our analysis such as *date and population*.<br/>Let's see the script!
 
 ```sql
 CREATE VIEW PobVaccinated AS 
@@ -116,8 +116,8 @@ CREATE VIEW PobVaccinated AS
 		  ,CAST(people_vaccinated_per_hundred as float) AS perc_pob_vac
 		  ,SUM(CAST(vac.new_vaccinations as float)) 
 		  OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) as total_vac
-	  FROM Covid19Project.dbo.Euro_deaths dea
-	  JOIN Covid19Project.dbo.Vacu_euro vac
+	  FROM Covid19Project.dbo.CovidDeaths dea
+	  JOIN Covid19Project.dbo.CovidVaccinations vac
 	  ON dea.location = vac.location AND dea.date = vac.date
 ```
 
@@ -127,7 +127,7 @@ For a better understanding of the data I developed a dynamic Dashboard in Power 
 Try it out [**here**](https://bit.ly/3tUNgzS).
 
 ✔️ **What was the evolution of the mortality rate in Spain compared to other European countries?**<br/>
-As shown in the graph, Spain is the Latin American country with the highest mortality rate on average (8.9%), those following are CountryB (0.0%) and CountryC (0.0%), i.e. approximately X out of every 100 Spanish COVID-19 cases have died in Spain.
+As shown in the graph, Spain is the European country with the highest mortality rate on average (8.9%), those following are CountryB (0.0%) and CountryC (0.0%), i.e. approximately X out of every 100 Spanish COVID-19 cases have died in Spain.
 
 <center><img src="https://imgur.com/RBad5w3.png" height="300"/></center>
 
