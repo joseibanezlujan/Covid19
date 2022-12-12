@@ -69,12 +69,12 @@ CREATE VIEW DIATasaContagPorPob AS
   SELECT location, date, population, total_cases, total_deaths
     ,(total_deaths/total_cases)* 100 AS per_tasamortalidad
     ,(total_cases/population)* 100 AS perc_contagiados
-  FROM Covid19Project.dbo.CovidDeaths  
+  FROM Portfolio.dbo.CovidDeaths  
 ```
 Then, we retrieve the information stored on DIATasaContagPorPob ordered by total_cases number in descending order.
 
 ```sql
-SELECT * from dbo.DIATasaContagPorPob
+SELECT * from Portfolio.dbo.DIATasaContagPorPob
 ORDER BY total_cases desc
 ```
 
@@ -83,7 +83,7 @@ After that we filter the total deaths by country *location* and *population* num
 ```sql
 CREATE VIEW RESUMEN AS
   SELECT location, population,MAX(cast(total_deaths as int)) AS totmuertos
-  FROM Covid19Project.dbo.CovidDeaths
+  FROM Portfolio.dbo.CovidDeaths
   GROUP BY location, population
 ```
 
@@ -96,13 +96,13 @@ CREATE VIEW RESTasaMortPorPob AS
     , ROUND(AVG(diabetes_prevalence),2) AS Diabetes
     , MAX(cast(total_deaths as int)) AS totalDeath 
     ,MAX(total_deaths/population)*100 AS perc_tasamortali
-  FROM Covid19Project.dbo.CovidDeaths
+  FROM Portfolio.dbo.CovidDeaths
   GROUP BY location, population
 ```
 After RESTasaMortPorPo view is created we retrieve the mentioned data ordered by perc_tasamortali in descending order.
 
 ```sql
-  SELECT * FROM RESTasaMortPorPob
+  SELECT * FROM Portfolio.dbo.RESTasaMortPorPob
   ORDER BY perc_tasamortali desc
 ```
 
@@ -116,8 +116,8 @@ CREATE VIEW PobVaccinated AS
 		  ,CAST(people_vaccinated_per_hundred as float) AS perc_pob_vac
 		  ,SUM(CAST(vac.new_vaccinations as float)) 
 		  OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) as total_vac
-	  FROM Covid19Project.dbo.CovidDeaths dea
-	  JOIN Covid19Project.dbo.CovidVaccinations vac
+	  FROM Portfolio.dbo.CovidDeaths dea
+	  JOIN Portfolio.dbo.CovidVaccinations vac
 	  ON dea.location = vac.location AND dea.date = vac.date
 ```
 
