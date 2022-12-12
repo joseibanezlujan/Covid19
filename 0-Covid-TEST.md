@@ -66,7 +66,7 @@ Check the following script for SQL SERVER (it is not possible and recommended to
 
 ```sql
 CREATE VIEW TasaMortPob AS
- SELECT Location, date, population, total_cases, new_cases, total_deaths, 
+ SELECT location, date, population, total_cases, new_cases, total_deaths, 
  ROUND((CAST(total_deaths as FLOAT)/CAST(total_cases as FLOAT))* 100, 4) AS perc_tasamortalidad,
  ROUND((CAST(total_cases as FLOAT)/CAST(population as FLOAT))* 100, 4) AS perc_contagiados
  FROM Portfolio.dbo.CovidDeaths  
@@ -120,15 +120,14 @@ After DIATasaContagPob view is created we retrieve the mentioned data ordered by
 It is necessary to merge with **JOIN** the information from the *CovidDeaths* and *CovidVaccinations* tables to contrast the mortality rate with the new vaccinations per day *new_vaccinations*. For this case we have used **OVER(PARTITION BY)** function instead of **GROUP BY** because "GROUP BY" is limited to display the attributes by which grouping is done and excludes important data such as *date and population*.
 
 ```sql
-CREATE VIEW PobVaccinated AS 
-	  SELECT dea.location, dea.date, dea.population
-		  ,vac.new_vaccinations
-		  ,CAST(people_vaccinated_per_hundred as float) AS perc_pob_vac
-		  ,SUM(CAST(vac.new_vaccinations as float)) 
-		  OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) as total_vac
-	  FROM Portfolio.dbo.CovidDeaths dea
-	  JOIN Portfolio.dbo.CovidVaccinations vac
-	  ON dea.location = vac.location AND dea.date = vac.date
+CREATE VIEW PobVaccinated AS
+ SELECT dea.location, dea.date, dea.population, vac.new_vaccinations,
+ CAST(people_vaccinated_per_hundred as float) AS perc_pob_vac,
+ SUM(CAST(vac.new_vaccinations as float))
+ OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) as total_vac
+ FROM Portfolio.dbo.CovidDeaths dea
+ JOIN Portfolio.dbo.CovidVaccinations vac
+ ON dea.location = vac.location AND dea.date = vac.date
 ```
 
 # Analysis and Results
