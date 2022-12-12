@@ -96,7 +96,9 @@ ORDER BY total_muertos DESC
 ```
 
 📍<ins>Indicators of diabetes incidence and average age</ins><br/>
-Only aggregate functions were used for this view, since the values for diabetes incidence and average age are the same for all records up to the cutoff date.<br/>The average of both variables was calculated and grouped with **GROUP BY** by location and number of inhabitants as the previous view. **FOR THIS CASE WE HACE USED A MODIFIED CovidDeaths table called 'CovidDeathsMOD'**
+Only aggregate functions were used, since the values for diabetes incidence and average age are the same for all records up to the cutoff date.
+The average of both variables was calculated and grouped with **GROUP BY** by location and number of inhabitants as the previous view. 
+**FOR THIS CASE WE HACE USED A MODIFIED CovidDeaths table called 'CovidDeathsMOD'**
 
 ```sql
 CREATE VIEW DIATasaContagPob AS
@@ -115,7 +117,7 @@ After DIATasaContagPob view is created we retrieve the mentioned data ordered by
 ```
 
 📍<ins>Vaccination and mortality</ins><br/>
-It is necessary to join with **JOIN** the information from the *CovidDeaths* and *CovidVaccinations* tables to contrast the mortality rate with the number of new vaccinations per day *new_vaccinations*. In this case we used the function **OVER(PARTITION BY)** instead of **GROUP BY** because the latter is limited to show the attributes by which the groups are grouped and excludes relevant variables for our analysis such as *date and population*.<br/>Let's see the script!
+It is necessary to merge with **JOIN** the information from the *CovidDeaths* and *CovidVaccinations* tables to contrast the mortality rate with the new vaccinations per day *new_vaccinations*. In this case we used the function **OVER(PARTITION BY)** instead of **GROUP BY** because the latter is limited to show the attributes by which the groups are grouped and excludes relevant variables for our analysis such as *date and population*.<br/>Let's see the script!
 
 ```sql
 CREATE VIEW PobVaccinated AS 
