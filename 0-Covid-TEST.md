@@ -78,7 +78,8 @@ SELECT * from Portfolio.dbo.TasaMortPob
 WHERE location = 'Spain'
 ORDER BY total_cases desc
 ```
-After we filter the total deaths by country *location* and *population* number. We use an aggregate function to see a summary of the information in the previous view, since this one only shows the maximum numbers up to the December 11 cutoff.
+
+After we filtered the total deaths number by *location* and *population* using an aggregate function to see a summary of previous view data. This view only displays the maximum number of deaths up to December 11 cutoff.
 
 ```sql
 CREATE VIEW RESTotalMuertos AS
@@ -86,7 +87,6 @@ CREATE VIEW RESTotalMuertos AS
  FROM Portfolio.dbo.CovidDeaths
  GROUP BY location, population 
 ```
-
 Once we created the view we proceed to obtain the data for all the european countries and arrange them from highest to lowest total deaths count.
 
 ```sql
@@ -94,6 +94,7 @@ SELECT * from Portfolio.dbo.RESTotalMuertos
 WHERE continent = 'Europe'
 ORDER BY total_muertos DESC
 ```
+
 
 📍<ins>Indicators of diabetes incidence and average age</ins><br/>
 Only aggregate functions were used, since average age and diabetes incidence values are the same for all records up to the cutoff date.
@@ -116,6 +117,7 @@ After DIATasaContagPob view is created we retrieve the mentioned data ordered by
  ORDER BY perc_tasamortal desc
 ```
 
+
 📍<ins>Vaccination and mortality</ins><br/>
 It is necessary to merge with **JOIN** the information from the *CovidDeaths* and *CovidVaccinations* tables to contrast the mortality rate with the new vaccinations per day *new_vaccinations*. For this case we have used **OVER(PARTITION BY)** function instead of **GROUP BY** because "GROUP BY" is limited to display the attributes by which grouping is done and excludes important data such as *date and population*.
 
@@ -129,6 +131,7 @@ CREATE VIEW PobVaccinated AS
  JOIN Portfolio.dbo.CovidVaccinations vac
  ON dea.location = vac.location AND dea.date = vac.date
 ```
+
 
 # Analysis and Results
 
