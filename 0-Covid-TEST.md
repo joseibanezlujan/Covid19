@@ -55,6 +55,7 @@ The data used for the analysis was obtained from [*Our World in Data*](https://o
 * Table "CovidDeaths" containing:  location, date, population, cases, deaths and hospitalization related information.
 * Table "CovidVaccinations" containing: location, date, age, gdp, diseases and other vaccination related data. 
 
+Please note that because original data files were created using an en-US system I had to convert this data using Powerquery indicating that their origin and saving the modified results on my system (es-ES). If you have an en-US system then this step can be skipped.
 
 # Creating Queries and Views
 
