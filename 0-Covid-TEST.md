@@ -125,10 +125,10 @@ It is necessary to merge with **JOIN** the information from the *CovidDeaths* an
 
 ```sql
 CREATE VIEW PobVaccinated AS
- SELECT dea.location, dea.date, dea.population, vac.new_vaccinations,
+ SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
  CAST(people_vaccinated_per_hundred as FLOAT) AS perc_pob_vac,
  SUM(CAST(vac.new_vaccinations as FLOAT))
- OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) as total_vac
+ OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) AS total_vac
  FROM Covid19Project.dbo.CovidDeaths dea
  JOIN Covid19Project.dbo.CovidVaccinations vac
  ON dea.location = vac.location AND dea.date = vac.date
