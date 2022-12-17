@@ -68,8 +68,8 @@ Check the following script for SQL SERVER (it is not possible and recommended to
 ```sql
 CREATE VIEW TasaMortPob AS
  SELECT location, date, population, total_cases, new_cases, total_deaths, 
- ROUND((CAST(total_deaths as FLOAT)/CAST(total_cases as FLOAT))* 100, 4) AS perc_tasamortalidad,
- ROUND((CAST(total_cases as FLOAT)/CAST(population as FLOAT))* 100, 4) AS perc_contagiados
+ ROUND((CAST(total_deaths AS FLOAT)/CAST(total_cases as FLOAT))* 100, 4) AS perc_tasamortalidad,
+ ROUND((CAST(total_cases AS FLOAT)/CAST(population as FLOAT))* 100, 4) AS perc_contagiados
  FROM Covid19Project.dbo.CovidDeaths
  ```
 Then, we retrieve the information stored on TasaMortPob ordered by total_cases number in descending order and selecting 'Spain' as location.
@@ -125,14 +125,22 @@ It is necessary to merge with **JOIN** the information from the *CovidDeaths* an
 
 ```sql
 CREATE VIEW PobVaccinated AS
- SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
- CAST(people_vaccinated_per_hundred as FLOAT) AS perc_pob_vac,
+ SELECT dea.continent, dea.location, dea.date, dea.population, 
+ ROUND((CAST(dea.total_deaths as FLOAT)/CAST(dea.total_cases as FLOAT))* 100, 4) AS perc_tasamortalidad, vac.new_vaccinations,
+ CAST(vac.people_vaccinated_per_hundred as FLOAT) AS perc_pob_vac,
  SUM(CAST(vac.new_vaccinations as FLOAT))
  OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) AS total_vac
  FROM Covid19Project.dbo.CovidDeaths dea
  JOIN Covid19Project.dbo.CovidVaccinations vac
  ON dea.location = vac.location AND dea.date = vac.date
  ```
+After that we can filter the results from that view using the following filters in order to have a more detailed approach to Covid19 effects on Spain.
+
+```sql
+SELECT * FROM Covid19Project.dbo.PobVaccinated
+WHERE location = 'Spain'
+ORDER BY perc_tasamortalidad DESC
+```
 
 
 # Analysis and Results
