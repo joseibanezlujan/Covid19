@@ -70,12 +70,12 @@ CREATE VIEW TasaMortPob AS
  SELECT location, date, population, total_cases, new_cases, total_deaths, 
  ROUND((CAST(total_deaths as FLOAT)/CAST(total_cases as FLOAT))* 100, 4) AS perc_tasamortalidad,
  ROUND((CAST(total_cases as FLOAT)/CAST(population as FLOAT))* 100, 4) AS perc_contagiados
- FROM Portfolio.dbo.CovidDeaths  
-```
+ FROM Covid19Project.dbo.CovidDeaths
+ ```
 Then, we retrieve the information stored on TasaMortPob ordered by total_cases number in descending order and selecting 'Spain' as location.
 
 ```sql
-SELECT * from Portfolio.dbo.TasaMortPob
+SELECT * from Covid19Project.dbo.TasaMortPob
 WHERE location = 'Spain'
 ORDER BY total_cases desc
 ```
@@ -84,14 +84,14 @@ After we filtered the total deaths number by *location* and *population* using a
 
 ```sql
 CREATE VIEW RESTotalMuertos AS
- SELECT location, population, MAX(CAST(total_deaths as FLOAT)) AS total_muertos
- FROM Portfolio.dbo.CovidDeaths
- GROUP BY location, population 
-```
+ SELECT continent, location, population, MAX(CAST(total_deaths as FLOAT)) AS total_muertos
+ FROM Covid19Project.dbo.CovidDeaths
+ GROUP BY location, population, continent
+ ```
 Once we created the view we proceed to obtain the data for all the european countries and arrange them from highest to lowest total deaths count.
 
 ```sql
-SELECT * from Portfolio.dbo.RESTotalMuertos
+SELECT * from Covid19Project.dbo.RESTotalMuertos
 WHERE continent = 'Europe'
 ORDER BY total_muertos DESC
 ```
@@ -104,19 +104,20 @@ The average of both variables was calculated and grouped with **GROUP BY** by lo
 
 ```sql
 CREATE VIEW DIATasaContagPob AS
- SELECT location, population, AVG(ROUND(median_age,0)) AS EdadProm,
+ SELECT continent, location, population, AVG(ROUND(median_age,0)) AS EdadProm,
  ROUND(AVG(CAST(diabetes_prevalence AS FLOAT)),2) AS Diabetes,
  MAX(CAST(total_deaths AS FLOAT)) AS totalDeath,
  MAX(CAST(total_deaths AS FLOAT)/CAST(population AS FLOAT))*100 AS perc_tasamortal
- FROM Portfolio.dbo.CovidDeathsMOD
- GROUP BY location, population
-```
-After DIATasaContagPob view is created we retrieve the mentioned data ordered by perc_tasamortal in descending order.
+ FROM Covid19Project.dbo.CovidDeathsMOD
+ GROUP BY location, population, continent
+ ```
+After DIATasaContagPob view is created we retrieve the mentioned data ordered by perc_tasamortal in descending order for all the european countries.
 
 ```sql
- SELECT * FROM Portfolio.dbo.DIATasaContagPob
+ SELECT * FROM Covid19Project.dbo.DIATasaContagPob
+ WHERE continent = 'Europe'
  ORDER BY perc_tasamortal desc
-```
+ ```
 
 
 📍<ins>Vaccination and mortality</ins><br/>
@@ -125,13 +126,13 @@ It is necessary to merge with **JOIN** the information from the *CovidDeaths* an
 ```sql
 CREATE VIEW PobVaccinated AS
  SELECT dea.location, dea.date, dea.population, vac.new_vaccinations,
- CAST(people_vaccinated_per_hundred as float) AS perc_pob_vac,
- SUM(CAST(vac.new_vaccinations as float))
+ CAST(people_vaccinated_per_hundred as FLOAT) AS perc_pob_vac,
+ SUM(CAST(vac.new_vaccinations as FLOAT))
  OVER(PARTITION BY dea.location ORDER BY dea.location, dea.date) as total_vac
- FROM Portfolio.dbo.CovidDeaths dea
- JOIN Portfolio.dbo.CovidVaccinations vac
+ FROM Covid19Project.dbo.CovidDeaths dea
+ JOIN Covid19Project.dbo.CovidVaccinations vac
  ON dea.location = vac.location AND dea.date = vac.date
-```
+ ```
 
 
 # Analysis and Results
