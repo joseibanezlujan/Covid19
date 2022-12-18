@@ -1,6 +1,6 @@
 # ![Image text]( https://github.com/joseibanezlujan/Covid19/blob/main/header.jpg)
 
-[![alt text](https://imgur.com/CAPTURA PANTALLA)](https://bit.ly/)
+[![alt text](https://i.imgur.com/7Ur83DD.png)](https://bit.ly/3WoyNYo)
 
 # **COVID-19 Outbreak Mortality Rate in Spain Analysis Case Study**
 
@@ -145,8 +145,8 @@ ORDER BY perc_tasamortalidad DESC
 
 # Analysis and Results
 
-For a better understanding of the data I developed a dynamic Dashboard in Power BI.<br/>
-Try it out [**here**](https://bit.ly/3tUNgzS).
+For an easier understanding of this case data analysis I created a dynamic Power BI Dashboard.<br/>
+You can check it here [**here**](https://bit.ly/3WoyNYo).
 
 ✔️ **What was the evolution of the mortality rate in Spain compared to other European countries?**<br/>
 As shown in the graph, Spain is the European country with the highest mortality rate on average (8.9%), those following are CountryB (0.0%) and CountryC (0.0%), i.e. approximately X out of every 100 Spanish COVID-19 cases have died in Spain.
