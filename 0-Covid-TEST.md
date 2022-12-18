@@ -145,8 +145,7 @@ ORDER BY perc_tasamortalidad DESC
 
 # Analysis and Results
 
-For an easier understanding of this case data analysis I created a dynamic Power BI Dashboard.<br/>
-You can check it here [**here**](https://bit.ly/3WoyNYo).
+For an easier understanding of this case data analysis I created a dynamic Power BI Dashboard. You can check it [**here**](https://bit.ly/3WoyNYo).
 
 ✔️ **What was the evolution of the mortality rate in Spain compared to other European countries?**<br/>
 As shown in the graph, Spain is the European country with the highest mortality rate on average (8.9%), those following are CountryB (0.0%) and CountryC (0.0%), i.e. approximately X out of every 100 Spanish COVID-19 cases have died in Spain.
@@ -175,6 +174,4 @@ Vaccination in Spain started on DD MMM. 20YY.<br/>
 
 ***
 
-### **📌 Discover more of my projects [HERE](https:///)**.
-
-<a href="https://www.linkedin.com/in/joseibanezlujan/"><img src="https://imgur.com/" height="auto" width="50" style="border-radius:50%"></a>
+### **📌 Discover more of my projects [HERE](https://github.com/joseibanezlujan/)**.
