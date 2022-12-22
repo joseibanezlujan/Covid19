@@ -2,7 +2,7 @@
 
 # **COVID-19 Outbreak Mortality Rate in Spain Analysis Case Study**
 
-[![alt text](https://i.imgur.com/OeZkSmD.png)](https://bit.ly/3WoyNYo)
+[![alt text](https://i.imgur.com/OeZkSmD.png)](https://bit.ly/3GdMjIY)
 
 # Case Background
 
