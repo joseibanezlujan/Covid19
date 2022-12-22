@@ -148,21 +148,17 @@ ORDER BY perc_tasamortalidad DESC
 For an easier understanding of this case data analysis I created a dynamic Power BI Dashboard. You can check it [**here**](https://bit.ly/3GdMjIY).
 
 ✔️ **What was the evolution of the mortality rate in Spain compared to other European countries?**<br/>
-As shown in the graph, Spain is the European country with the highest mortality rate on average (8.9%), those following are CountryB (0.0%) and CountryC (0.0%), i.e. approximately X out of every 100 Spanish COVID-19 cases have died in Spain.
+As shown in the graph, Spain is the eighth European country with the highest total covid19 deaths and the sixteenth country with a mortality rate percentage equivalent to (0.86%). Nowadays, compared to Bosnia and Herzegovina which is the country with the highest mortality (4.05%) Spain Covid19 mortality rate is quite low.
 
 <center><img src="https://imgur.com/EegcMQI.png"/></center>
-
-With respect to the total population of 47.33 million, X out of every 1000 Spaniards on average (0.00%) have died from COVID-19 to date.
 
 ✔️ **Did factors such as the incidence of diabetes and average age influence the countries' mortality rate?**<br/>No influence of diabetes incidence and average age of the population on the mortality rate in European countries is observed. The scatter plot does not show any trend between Diabetes Prevalence and Mortality Rate, nor between Average Age and Mortality Rate, so the probable influence of these variables is ruled out.
 
 <center><img src="https://imgur.com/IfPZzP5.png"/></center>
 
-REVISAR EJEMPLO: For example, if we consider age as a determinant of mortality, this premise can be invalidated when evaluating the case of Uruguay: With an average age higher than the rest of the countries, it presents one of the lowest mortality rates, since approximately 2 out of every 1000 Uruguayans die from COVID-19.
-
 <center><img src="https://imgur.com/FvDtRKU.png"/></center>
 
-✔️ **What impact did vaccination in Spain have on the mortality rate compared to other countries?**<br/>The mortality rate before January 4 (vaccination start date) was 9.14%, by the end of 2022 this figure decreased to 8.89%. In other words, 3 out of every 1000 infected (-0.25%) stopped dying after vaccination.
+✔️ **What impact did vaccination in Spain have on the mortality rate (Death percentage) compared to other countries?**<br/>The mortality rate before January 4 (vaccination start date) was 2.63%, by the end of 2022 this figure decreased to 0.86%. In other words, (-1.77%) of total Covid19 infected detected cases stopped dying after vaccination until today.
 
 *BEFORE VACCINATION*<br/>
 Vaccination in Spain started on 04 JAN. 2021.<br/>
